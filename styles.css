@@ -1,0 +1,139 @@
+/* Custom CSS for Anti-Scammer AI */
+
+/* Root and Base Enhancements */
+:root {
+  --primary-navy: #0A172E;
+  --secondary-navy: #132850;
+  --brand-blue: #1E40AF;
+  --brand-accent: #3B82F6;
+  --scam-red: #DC2626;
+  --safe-green: #10B981;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Tab button active state */
+.tab-button {
+  color: #475569;
+  background-color: transparent;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+}
+
+.tab-button.active {
+  background-color: #ffffff;
+  color: #1e3a8a;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+}
+
+.tab-button.active svg {
+  color: #2563eb;
+}
+
+/* Subtle pulse animation for threat detection */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px -3px rgba(239, 68, 68, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 35px 2px rgba(239, 68, 68, 0.65);
+  }
+}
+
+#scamDetectedBox {
+  animation: pulseGlow 3s infinite ease-in-out;
+}
+
+/* Subtle bounce */
+@keyframes bounceSubtle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.animate-bounce-subtle {
+  animation: bounceSubtle 2s infinite ease-in-out;
+}
+
+/* Slow spin */
+@keyframes spinSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spinSlow 12s linear infinite;
+}
+
+/* Smooth drop zone drag state */
+#dropzone.dragover {
+  border-color: #2563eb;
+  background-color: rgba(239, 246, 255, 0.8);
+  transform: scale(1.01);
+}
+
+/* Modal Animation */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-in {
+  animation: modalFadeIn 0.2s ease-out forwards;
+}
+
+/* Toast Notification Styling */
+.toast {
+  pointer-events: auto;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(1rem);
+  opacity: 0;
+}
+
+.toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Large input hover & focus smoothness */
+textarea, input[type="url"] {
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+/* Responsive typography and tap targets */
+@media (max-width: 640px) {
+  .tab-button {
+    font-size: 0.75rem;
+    padding: 0.6rem 0.4rem;
+  }
+}

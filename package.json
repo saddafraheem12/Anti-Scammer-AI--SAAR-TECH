@@ -1,0 +1,20 @@
+{
+  "name": "anti-scammer-ai",
+  "version": "1.0.0",
+  "description": "Frontend UI for Anti-Scammer AI - AI-powered scam and fraud protection for messages, links, and screenshots",
+  "scripts": {
+    "start": "npx serve -l 3000",
+    "dev": "npx serve -l 3000",
+    "bundle": "node build.js"
+  },
+  "keywords": [
+    "anti-scammer",
+    "ai",
+    "fraud-detection",
+    "phishing-protection",
+    "cybersecurity",
+    "ui"
+  ],
+  "author": "",
+  "license": "MIT"
+}

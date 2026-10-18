@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anti-Scammer AI by SAAR TECH — Digital Fraud & Scam Protection</title>
+  <meta name="description" content="AI-powered tool to verify if an SMS, WhatsApp message, link, or screenshot is a scam. Protect yourself before you click.">
+  
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            navy: {
+              950: '#060D1A',
+              900: '#0A172E',
+              850: '#0E1E3D',
+              800: '#132850',
+              700: '#1C3970',
+              600: '#274F9B',
+            },
+            brand: {
+              blue: '#1E40AF',
+              accent: '#3B82F6',
+              cyan: '#06B6D4',
+            },
+            status: {
+              danger: '#EF4444',
+              dangerBg: '#FEF2F2',
+              dangerBorder: '#F87171',
+              safe: '#10B981',
+              safeBg: '#ECFDF5',
+              safeBorder: '#34D399',
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          boxShadow: {
+            'glow-blue': '0 0 25px -5px rgba(59, 130, 246, 0.4)',
+            'glow-red': '0 0 30px -5px rgba(239, 68, 68, 0.35)',
+            'glow-green': '0 0 30px -5px rgba(16, 185, 129, 0.35)',
+          }
+        }
+      }
+    }
+  </script>
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex flex-col selection:bg-blue-500 selection:text-white">
+
+  <!-- TOP NOTIFICATION BANNER -->
+  <aside class="bg-navy-950 text-slate-300 text-xs py-2 px-4 border-b border-navy-800">
+    <div class="max-w-5xl mx-auto flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2 overflow-hidden text-ellipsis whitespace-nowrap">
+        <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 uppercase tracking-wider">
+          LIVE ALERT
+        </span>
+        <span class="truncate">Surge in fake bank SMS & WhatsApp OTP lottery scams reported today. Stay vigilant!</span>
+      </div>
+      <div class="hidden sm:flex items-center gap-4 text-slate-400 shrink-0">
+        <span class="flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          AI Threat Shield: <strong class="text-slate-200">Online</strong>
+        </span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- NAVBAR -->
+  <header class="bg-navy-900/95 backdrop-blur-md sticky top-0 z-40 border-b border-navy-800 transition-all duration-200 shadow-sm">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-700 via-blue-600 to-cyan-500 p-0.5 shadow-glow-blue flex items-center justify-center transition-transform group-hover:scale-105">
+          <div class="w-full h-full bg-navy-900 rounded-[10px] flex items-center justify-center">
+            <!-- Shield SVG -->
+            <svg class="w-5 h-5 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="m9 12 2 2 4-4"/>
+            </svg>
+          </div>
+        </div>
+        <div class="flex flex-col">
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <span class="font-bold text-base sm:text-lg text-white tracking-tight">Anti-Scammer</span>
+            <span class="px-1.5 py-0.2 text-[11px] font-extrabold bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded">AI</span>
+            <span class="text-xs text-slate-400 font-normal">by</span>
+            <span class="text-xs sm:text-sm font-black tracking-wider bg-gradient-to-r from-cyan-400 to-teal-300 bg-clip-text text-transparent uppercase">SAAR TECH</span>
+          </div>
+          <span class="text-[11px] text-slate-400 -mt-0.5 hidden xs:block">Real-Time Threat Detection</span>
+        </div>
+      </a>
+
+      <!-- Quick Nav Action -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Settings Gear Icon (Requirement 1) -->
+        <button id="settingsBtn" class="text-xs font-semibold px-2.5 sm:px-3 py-1.5 rounded-lg border border-navy-700 hover:border-cyan-500/50 bg-navy-850 hover:bg-navy-800 text-slate-200 hover:text-white transition flex items-center gap-1.5 shadow-sm group" title="Settings (Google Gemini API Key)">
+          <svg class="w-4 h-4 text-cyan-400 group-hover:rotate-90 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          <span class="hidden xs:inline" id="settingsLabel">Settings</span>
+          <span class="w-2 h-2 rounded-full bg-amber-400" id="settingsKeyDot" title="API Key Status"></span>
+        </button>
+
+
+        <button id="helpModalBtn" class="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-navy-800 transition" title="Scam Helpline Information">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <path d="M12 17h.01"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT AREA -->
+  <main class="flex-grow">
+    
+    <!-- HERO SECTION (Requirement 3) -->
+    <section class="relative bg-gradient-to-b from-navy-900 via-navy-850 to-navy-950 text-white pt-12 pb-20 px-4 sm:px-6 overflow-hidden">
+      <!-- Subtle Decorative Background Glow -->
+      <div class="absolute inset-0 pointer-events-none opacity-25">
+        <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-blue-600/30 blur-[120px] rounded-full"></div>
+        <div class="absolute top-1/2 -left-20 w-80 h-80 bg-cyan-600/20 blur-[100px] rounded-full"></div>
+        <div class="absolute top-1/3 -right-20 w-80 h-80 bg-indigo-600/20 blur-[100px] rounded-full"></div>
+      </div>
+
+      <div class="max-w-3xl mx-auto text-center relative z-10">
+        <!-- Badge -->
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-400/20 text-blue-300 text-xs font-semibold uppercase tracking-wider mb-5">
+          <svg class="w-3.5 h-3.5 text-cyan-400 animate-spin-slow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48 2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48 2.83-2.83"/>
+          </svg>
+          Smart Fraud Defense Engine
+        </div>
+
+        <!-- Hero Title (Requirement 3 & Branding) -->
+        <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-4 leading-tight">
+          Anti-Scammer <span class="bg-gradient-to-r from-blue-400 via-cyan-300 to-indigo-300 bg-clip-text text-transparent">AI</span>
+          <span class="block sm:inline sm:ml-2 text-2xl sm:text-4xl lg:text-5xl font-medium text-slate-300">
+            by <span class="font-black bg-gradient-to-r from-cyan-300 via-teal-300 to-cyan-400 bg-clip-text text-transparent tracking-wide uppercase drop-shadow-sm">SAAR TECH</span>
+          </span>
+        </h1>
+
+        <!-- Hero Subtitle (Requirement 3) -->
+        <p class="text-base sm:text-xl text-slate-300 font-normal max-w-2xl mx-auto leading-relaxed">
+          Protect yourself from digital scammers before you click.
+        </p>
+
+        <!-- Feature Pills -->
+        <div class="mt-7 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-xs sm:text-sm text-slate-300">
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>SMS & WhatsApp</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Phishing URLs</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Instant OCR Screenshots</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCANNER CONTAINER CARD (Mobile-First & Elevated) -->
+    <section class="max-w-3xl mx-auto px-4 sm:px-6 -mt-10 relative z-20 mb-16">
+      <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/70 border border-slate-200/80 overflow-hidden transition-all duration-300">
+        
+        <!-- 3 MAIN TABS HEADER (Requirement 2) -->
+        <div class="bg-slate-100/90 p-2 sm:p-2.5 border-b border-slate-200 flex gap-1.5 sm:gap-2">
+          <!-- Tab 1: Message Scanner -->
+          <button id="tab-message" class="tab-button active flex-1 py-3 px-3 rounded-xl font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all duration-200 focus:outline-none" data-tab="message">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+            <span>Message Scanner</span>
+          </button>
+
+          <!-- Tab 2: Link Checker -->
+          <button id="tab-link" class="tab-button flex-1 py-3 px-3 rounded-xl font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 transition-all duration-200 focus:outline-none" data-tab="link">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+            </svg>
+            <span>Link Checker</span>
+          </button>
+
+          <!-- Tab 3: Screenshot Analyzer -->
+          <button id="tab-screenshot" class="tab-button flex-1 py-3 px-3 rounded-xl font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 transition-all duration-200 focus:outline-none" data-tab="screenshot">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
+              <circle cx="9" cy="9" r="2"/>
+              <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+            </svg>
+            <span class="truncate">Screenshot Analyzer</span>
+          </button>
+        </div>
+
+        <!-- TAB PANELS CONTENT -->
+        <div class="p-5 sm:p-7">
+
+          <!-- TAB PANEL 1: MESSAGE SCANNER (Requirement 5 & Gemini Integration) -->
+          <div id="panel-message" class="tab-panel">
+            <!-- Gemini Engine Status Banner -->
+            <div id="geminiStatusStrip" class="mb-3.5 p-2.5 sm:p-3 rounded-xl bg-gradient-to-r from-blue-50/90 via-cyan-50/70 to-slate-50 border border-blue-200/80 flex flex-col xs:flex-row xs:items-center justify-between gap-2.5 text-xs transition">
+              <div class="flex items-center gap-2">
+                <span class="flex h-2.5 w-2.5 relative shrink-0">
+                  <span id="geminiPulseRing" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75 hidden"></span>
+                  <span id="geminiStripDot" class="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-400"></span>
+                </span>
+                <div class="leading-tight">
+                  <span class="font-bold text-navy-950">Google Gemini AI Engine:</span>
+                  <span id="geminiStripText" class="text-slate-600 ml-1">Connect your Gemini API key to enable live LLM scam reasoning.</span>
+                </div>
+              </div>
+              <button type="button" id="openGeminiModalFromStrip" class="self-start xs:self-auto shrink-0 font-bold text-blue-600 hover:text-blue-800 text-xs flex items-center gap-1 hover:underline underline-offset-2">
+                <span id="geminiStripBtnText">Connect Key</span> &rarr;
+              </button>
+            </div>
+
+            <div class="flex items-center justify-between mb-2">
+              <label for="messageInput" class="text-xs sm:text-sm font-bold text-navy-900 flex items-center gap-2">
+                <span>Suspicious Message Text</span>
+                <span class="text-[11px] font-normal text-slate-500">(SMS, WhatsApp, Telegram, Email)</span>
+              </label>
+              <div class="flex items-center gap-2">
+                <button type="button" id="pasteBtn" class="text-xs text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1 py-1 px-2 rounded hover:bg-blue-50 transition">
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>
+                  <span>Paste</span>
+                </button>
+                <button type="button" id="clearMessageBtn" class="text-xs text-slate-400 hover:text-slate-600 font-medium py-1 px-2 rounded hover:bg-slate-100 transition hidden">
+                  Clear
+                </button>
+              </div>
+            </div>
+
+            <!-- Large Text Area (Requirement 5) -->
+            <div class="relative">
+              <textarea 
+                id="messageInput" 
+                rows="6" 
+                class="w-full text-base sm:text-lg text-slate-800 placeholder-slate-400 p-4 sm:p-5 rounded-xl border-2 border-slate-200 focus:border-blue-600 focus:ring-4 focus:ring-blue-100 outline-none transition-all resize-y shadow-inner"
+                placeholder="Paste the suspicious SMS, WhatsApp message, or email here to check for scam indicators..."></textarea>
+              <div class="absolute bottom-3 right-3 text-xs text-slate-400 font-mono pointer-events-none" id="charCount">0 chars</div>
+            </div>
+
+            <!-- Quick Example Presets -->
+            <div class="mt-3.5 flex flex-wrap items-center gap-2">
+              <span class="text-xs font-semibold text-slate-500">Quick Examples:</span>
+              <button type="button" class="example-btn text-xs bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 px-2.5 py-1 rounded-full border border-slate-200 hover:border-blue-200 transition" data-example="bank">
+                🚨 Bank Account Freeze
+              </button>
+              <button type="button" class="example-btn text-xs bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 px-2.5 py-1 rounded-full border border-slate-200 hover:border-blue-200 transition" data-example="parcel">
+                📦 Unclaimed Package
+              </button>
+              <button type="button" class="example-btn text-xs bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 px-2.5 py-1 rounded-full border border-slate-200 hover:border-blue-200 transition" data-example="job">
+                💼 WhatsApp $300/Day Job
+              </button>
+              <button type="button" class="example-btn text-xs bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 px-2.5 py-1 rounded-full border border-slate-200 hover:border-emerald-200 transition" data-example="safe">
+                ✅ Legitimate Order
+              </button>
+            </div>
+          </div>
+
+          <!-- TAB PANEL 2: LINK CHECKER (Requirement 2 & 5) -->
+          <div id="panel-link" class="tab-panel hidden">
+            <div class="flex items-center justify-between mb-2">
+              <label for="linkInput" class="text-xs sm:text-sm font-bold text-navy-900 flex items-center gap-2">
+                <span>Suspicious URL or Domain</span>
+                <span class="text-[11px] font-normal text-slate-500">(Hyperlinks, bit.ly, shortened links)</span>
+              </label>
+              <button type="button" id="pasteLinkBtn" class="text-xs text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1 py-1 px-2 rounded hover:bg-blue-50 transition">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>
+                <span>Paste</span>
+              </button>
+            </div>
+
+            <!-- Large Input Field (Requirement 5) -->
+            <div class="relative flex items-center">
+              <div class="absolute left-4 text-slate-400 pointer-events-none">
+                <svg class="w-5 h-5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
+              </div>
+              <input 
+                type="url" 
+                id="linkInput" 
+                class="w-full text-base sm:text-lg text-slate-800 placeholder-slate-400 pl-12 pr-4 py-4 sm:py-5 rounded-xl border-2 border-slate-200 focus:border-blue-600 focus:ring-4 focus:ring-blue-100 outline-none transition-all shadow-inner font-mono text-sm sm:text-base"
+                placeholder="https://example-secure-bank-login.xyz/verify">
+            </div>
+
+            <!-- Quick Link Examples -->
+            <div class="mt-3.5 flex flex-wrap items-center gap-2">
+              <span class="text-xs font-semibold text-slate-500">Quick Examples:</span>
+              <button type="button" class="example-link-btn text-xs bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 px-2.5 py-1 rounded-full border border-slate-200 transition" data-url="http://netflix-billing-renew-support.xyz/login">
+                ⚠️ Fake Netflix Login
+              </button>
+              <button type="button" class="example-link-btn text-xs bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 px-2.5 py-1 rounded-full border border-slate-200 transition" data-url="https://usps-tracking-package-redelivery-fee.top">
+                ⚠️ Fake Postal Fee
+              </button>
+              <button type="button" class="example-link-btn text-xs bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 px-2.5 py-1 rounded-full border border-slate-200 transition" data-url="https://github.com/">
+                ✅ Official GitHub
+              </button>
+              <button type="button" class="example-link-btn text-xs bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 px-2.5 py-1 rounded-full border border-slate-200 transition" data-url="https://www.paypal.com/signin">
+                ✅ Official PayPal
+              </button>
+            </div>
+          </div>
+
+          <!-- TAB PANEL 3: SCREENSHOT ANALYZER (Requirement 2 & 5) -->
+          <div id="panel-screenshot" class="tab-panel hidden">
+            <div class="flex items-center justify-between mb-2">
+              <label class="text-xs sm:text-sm font-bold text-navy-900 flex items-center gap-2">
+                <span>Upload Screenshot</span>
+                <span class="text-[11px] font-normal text-slate-500">(WhatsApp chat, SMS bubble, DM)</span>
+              </label>
+              <span class="text-xs text-slate-400">PNG, JPG, WEBP</span>
+            </div>
+
+            <!-- Drag & Drop Zone -->
+            <div id="dropzone" class="border-2 border-dashed border-slate-300 hover:border-blue-500 bg-slate-50/70 hover:bg-blue-50/30 rounded-xl p-8 sm:p-10 text-center cursor-pointer transition-all duration-200 group relative">
+              <input type="file" id="screenshotInput" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+              
+              <div id="dropzoneDefaultState">
+                <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-sm">
+                  <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
+                    <circle cx="9" cy="9" r="2"/>
+                    <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+                  </svg>
+                </div>
+                <h4 class="text-sm sm:text-base font-bold text-slate-800 mb-1">
+                  Drag and drop your screenshot here
+                </h4>
+                <p class="text-xs text-slate-500 mb-3">or <span class="text-blue-600 font-semibold underline decoration-2 underline-offset-2">browse files</span> from your phone or computer</p>
+                <div class="inline-flex items-center gap-1.5 text-[11px] text-slate-400 bg-white px-2.5 py-1 rounded-full border border-slate-200">
+                  <svg class="w-3.5 h-3.5 text-cyan-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10H12V2z"/></svg>
+                  <span>AI OCR extracts text, sender numbers, and hidden QR codes</span>
+                </div>
+              </div>
+
+              <!-- Preview State (Initially Hidden) -->
+              <div id="dropzonePreviewState" class="hidden flex flex-col items-center">
+                <div class="relative max-w-xs mx-auto mb-2 rounded-lg overflow-hidden border border-slate-300 shadow">
+                  <img id="previewImage" src="" alt="Screenshot preview" class="max-h-48 object-cover">
+                  <button type="button" id="removeImageBtn" class="absolute top-2 right-2 bg-slate-900/80 hover:bg-red-600 text-white p-1 rounded-full transition">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                  </button>
+                </div>
+                <span id="previewFilename" class="text-xs font-mono text-slate-600 truncate max-w-xs">screenshot.png</span>
+              </div>
+            </div>
+
+            <!-- Sample Screenshot Presets -->
+            <div class="mt-3.5 flex flex-wrap items-center gap-2">
+              <span class="text-xs font-semibold text-slate-500">Quick Samples:</span>
+              <button type="button" id="loadCasualChatScreenshotBtn" class="text-xs bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 px-2.5 py-1 rounded-full border border-slate-200 transition">
+                ✅ Casual Chat Screenshot (Safe)
+              </button>
+              <button type="button" id="loadSampleScreenshotBtn" class="text-xs bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 px-2.5 py-1 rounded-full border border-slate-200 transition">
+                🚨 Fake Crypto Lottery (Scam)
+              </button>
+            </div>
+          </div>
+
+          <!-- ANALYZE ACTION BUTTON (Requirement 6) -->
+          <div class="mt-6 pt-5 border-t border-slate-100 flex flex-col sm:flex-row items-center gap-3">
+            <button 
+              id="analyzeBtn" 
+              type="button" 
+              class="w-full py-4 px-6 rounded-xl font-bold text-white text-base sm:text-lg bg-gradient-to-r from-blue-700 via-blue-600 to-cyan-600 hover:from-blue-800 hover:to-cyan-700 active:scale-[0.99] transition-all shadow-lg shadow-blue-500/25 flex items-center justify-center gap-3 relative overflow-hidden group">
+              
+              <!-- Shimmer light overlay -->
+              <span class="absolute inset-0 w-full h-full bg-white/20 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out pointer-events-none"></span>
+
+              <!-- Default Button State -->
+              <span id="btnDefaultState" class="flex items-center gap-2.5">
+                <svg class="w-5 h-5 text-cyan-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  <circle cx="12" cy="11" r="3"/>
+                </svg>
+                <span>Analyze with Anti-Scammer AI</span>
+              </span>
+
+              <!-- Loading Spinner State (Requirement 6) -->
+              <span id="btnLoadingState" class="hidden flex items-center gap-2.5">
+                <svg class="w-5 h-5 animate-spin text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span id="loadingProgressText">Running AI Fraud Analysis...</span>
+              </span>
+            </button>
+          </div>
+
+          <!-- SCAN PROGRESS STEPS ANIMATION (Visual polish during loading) -->
+          <div id="scanStepsTracker" class="hidden mt-4 bg-slate-50 rounded-xl p-3.5 border border-slate-200">
+            <div class="flex items-center gap-3 text-xs text-slate-600">
+              <span class="w-4 h-4 rounded-full border-2 border-blue-600 border-t-transparent animate-spin shrink-0"></span>
+              <span id="scanStepDescription" class="font-medium text-slate-700">Evaluating linguistic urgency and psychological triggers...</span>
+            </div>
+            <div class="w-full bg-slate-200 rounded-full h-1.5 mt-2.5 overflow-hidden">
+              <div id="scanProgressBar" class="bg-gradient-to-r from-blue-600 to-cyan-500 h-1.5 rounded-full w-1/4 transition-all duration-300"></div>
+            </div>
+          </div>
+
+          <!-- ERROR BANNER (Requirement 4: Readable error display without alert) -->
+          <div id="scanErrorMessage" class="hidden mt-4 p-4 rounded-xl bg-red-50 border border-red-200 text-red-800 flex items-start gap-3">
+            <svg class="w-5 h-5 text-red-600 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <div>
+              <h4 class="font-bold text-xs uppercase tracking-wider text-red-900">Analysis Failed</h4>
+              <p id="scanErrorText" class="text-xs sm:text-sm text-red-700 mt-1 leading-relaxed font-medium"></p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RESULT SECTION (Requirement 4 & 6: Red / Green warning indicator box) -->
+        <div id="resultContainer" class="hidden border-t-2 border-slate-200 transition-all duration-500">
+          
+          <!-- DANGER / SCAM DETECTED RESULT BOX (Requirement 6 & Gemini AI) -->
+          <div id="scamDetectedBox" class="hidden p-6 sm:p-8 bg-gradient-to-br from-red-50 via-white to-red-50/60 border-l-8 border-red-600">
+            
+            <!-- Top Alert Badge & Score -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-red-200">
+              <div class="flex items-start gap-3.5">
+                <div class="w-12 h-12 rounded-xl bg-red-600 text-white flex items-center justify-center shrink-0 shadow-glow-red animate-bounce-subtle">
+                  <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                    <line x1="12" y1="9" x2="12" y2="13"/>
+                    <line x1="12" y1="17" x2="12.01" y2="17"/>
+                  </svg>
+                </div>
+                <div>
+                  <div class="flex items-center gap-2 flex-wrap mb-1">
+                    <span id="scamThreatBadge" class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[11px] font-extrabold uppercase tracking-wide bg-red-100 text-red-700 border border-red-200">
+                      <span class="w-1.5 h-1.5 rounded-full bg-red-600 animate-ping"></span>
+                      High Risk Threat
+                    </span>
+                    <span id="scamEngineBadge" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-blue-100/80 text-blue-800 border border-blue-200">
+                      ✨ Google Gemini 3.8 Flash
+                    </span>
+                  </div>
+                  <!-- Title specified in Requirement 6: "Scammer Detected!" -->
+                  <h3 id="scamTitle" class="text-2xl sm:text-3xl font-extrabold text-red-700 tracking-tight">
+                    Scammer Detected!
+                  </h3>
+                  <p id="scamClassification" class="text-xs font-semibold text-red-800/80 mt-0.5">Impersonation & Phishing Attempt</p>
+                </div>
+              </div>
+
+              <!-- Threat Probability Badge -->
+              <div class="bg-white/90 backdrop-blur rounded-xl px-4 py-2.5 border border-red-200 shadow-sm flex items-center gap-3 self-start sm:self-center">
+                <div class="text-right">
+                  <div class="text-[10px] uppercase font-bold text-slate-400">Risk Score</div>
+                  <div class="text-xl sm:text-2xl font-black text-red-600" id="scamScore">97.4%</div>
+                </div>
+                <div id="scamRiskPill" class="w-10 h-10 rounded-full border-4 border-red-500 border-t-red-200 flex items-center justify-center text-red-600 font-bold text-xs">
+                  HIGH
+                </div>
+              </div>
+            </div>
+
+            <!-- AI Explanation Box (Requirement 4) -->
+            <div id="scamExplanationBox" class="mt-5 p-4 rounded-xl bg-red-100/80 border border-red-200">
+              <div class="text-xs font-bold uppercase tracking-wider text-red-900 mb-1.5 flex items-center gap-2">
+                <svg class="w-4 h-4 text-red-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <span>AI Scam Analysis & Explanation</span>
+              </div>
+              <p id="scamExplanationText" class="text-xs sm:text-sm text-red-950 font-medium leading-relaxed"></p>
+            </div>
+
+            <!-- Threat Breakdown Cards (Dynamically Populated by Gemini) -->
+            <div id="threatBreakdownContainer" class="mt-5 grid grid-cols-1 md:grid-cols-3 gap-3.5">
+              <div class="bg-white rounded-xl p-3.5 border border-red-100 shadow-sm">
+                <div class="flex items-center gap-2 text-xs font-bold text-red-700 mb-1">
+                  <svg class="w-4 h-4 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <span>Artificial Urgency</span>
+                </div>
+                <p class="text-xs text-slate-600">Pressures victim to act within minutes to bypass rational judgment.</p>
+              </div>
+
+              <div class="bg-white rounded-xl p-3.5 border border-red-100 shadow-sm">
+                <div class="flex items-center gap-2 text-xs font-bold text-red-700 mb-1">
+                  <svg class="w-4 h-4 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  <span>Brand Impersonation</span>
+                </div>
+                <p class="text-xs text-slate-600">Spoofs legitimate bank or courier service headers without cryptographic verification.</p>
+              </div>
+
+              <div class="bg-white rounded-xl p-3.5 border border-red-100 shadow-sm">
+                <div class="flex items-center gap-2 text-xs font-bold text-red-700 mb-1">
+                  <svg class="w-4 h-4 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/></svg>
+                  <span>Suspicious Destination</span>
+                </div>
+                <p class="text-xs text-slate-600">Links redirect through newly registered domains designed to harvest credentials.</p>
+              </div>
+            </div>
+
+            <!-- Protective Recommendation List (Dynamically Populated by Gemini) -->
+            <div class="mt-6 bg-red-100/60 rounded-xl p-4 border border-red-200">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-red-900 mb-2.5 flex items-center gap-2">
+                <svg class="w-4 h-4 text-red-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <span>Recommended Immediate Actions</span>
+              </h4>
+              <ul id="actionStepsList" class="text-xs sm:text-sm text-red-950 space-y-1.5 pl-5 list-disc">
+                <li><strong>Do NOT click</strong> any links or download attachments from this message.</li>
+                <li><strong>Never disclose</strong> two-factor OTP codes, passwords, or banking PINs.</li>
+                <li><strong>Block and report</strong> the sender's phone number or email address.</li>
+                <li>If you already clicked or submitted data, contact your bank's fraud line immediately.</li>
+              </ul>
+            </div>
+
+            <!-- Action Toolbar for Results -->
+            <div class="mt-5 flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-red-200/80">
+              <button type="button" id="copyReportBtn" class="text-xs font-semibold px-4 py-2 rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 shadow-sm flex items-center gap-1.5 transition">
+                <svg class="w-4 h-4 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                <span>Copy Warning Report</span>
+              </button>
+              <button type="button" id="scanAnotherBtn" class="text-xs font-semibold px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white shadow-sm flex items-center gap-1.5 transition">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+                <span>Scan Another Item</span>
+              </button>
+            </div>
+
+          </div>
+
+          <!-- SAFE / VERIFIED RESULT BOX (Requirement 4: Green Indicator) -->
+          <div id="safeDetectedBox" class="hidden p-6 sm:p-8 bg-gradient-to-br from-emerald-50 via-white to-emerald-50/60 border-l-8 border-emerald-500">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-emerald-200">
+              <div class="flex items-start gap-3.5">
+                <div class="w-12 h-12 rounded-xl bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-glow-green">
+                  <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    <polyline points="9 12 11 14 15 10"/>
+                  </svg>
+                </div>
+                <div>
+                  <div class="flex items-center gap-2 flex-wrap mb-1">
+                    <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[11px] font-extrabold uppercase tracking-wide bg-emerald-100 text-emerald-800 border border-emerald-200">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                      Verified Clean
+                    </span>
+                    <span id="safeEngineBadge" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-900 border border-emerald-300">
+                      ✨ Google Gemini 3.8 Flash
+                    </span>
+                  </div>
+                  <h3 id="safeTitle" class="text-2xl sm:text-3xl font-extrabold text-emerald-800 tracking-tight">
+                    No Threats Detected
+                  </h3>
+                  <p id="safeClassification" class="text-xs font-semibold text-emerald-700 mt-0.5">Legitimate & Safe Communication</p>
+                </div>
+              </div>
+
+              <!-- Safety Score -->
+              <div class="bg-white/90 backdrop-blur rounded-xl px-4 py-2.5 border border-emerald-200 shadow-sm flex items-center gap-3 self-start sm:self-center">
+                <div class="text-right">
+                  <div class="text-[10px] uppercase font-bold text-slate-400">Trust Score</div>
+                  <div class="text-xl sm:text-2xl font-black text-emerald-600" id="safeTrustScore">99.1%</div>
+                </div>
+                <div class="w-10 h-10 rounded-full border-4 border-emerald-500 flex items-center justify-center text-emerald-600 font-bold text-xs">
+                  SAFE
+                </div>
+              </div>
+            </div>
+
+            <!-- Safe Details (Requirement 4) -->
+            <div class="mt-5 p-4 rounded-xl bg-emerald-100/70 border border-emerald-200">
+              <div class="text-xs font-bold uppercase tracking-wider text-emerald-900 mb-1.5 flex items-center gap-2">
+                <svg class="w-4 h-4 text-emerald-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>AI Safety Explanation</span>
+              </div>
+              <p id="safeExplanationText" class="text-xs sm:text-sm text-emerald-950 font-medium leading-relaxed"></p>
+              <p class="text-[11px] text-emerald-800/80 mt-2 italic">Always verify sensitive account requests directly with official providers.</p>
+            </div>
+
+            <div class="mt-5 flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-emerald-200/80">
+              <button type="button" id="copySafeReportBtn" class="text-xs font-semibold px-4 py-2 rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 shadow-sm flex items-center gap-1.5 transition">
+                <svg class="w-4 h-4 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                <span>Copy Safety Report</span>
+              </button>
+              <button type="button" class="scanAnotherSafeBtn text-xs font-semibold px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm flex items-center gap-1.5 transition">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+                <span>Scan Another Item</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TRUST & HOW IT WORKS SECTION -->
+    <section class="max-w-5xl mx-auto px-4 sm:px-6 py-8 mb-12">
+      <div class="text-center mb-8">
+        <h2 class="text-xl sm:text-2xl font-bold text-navy-950">How Anti-Scammer AI Keeps You Safe</h2>
+        <p class="text-xs sm:text-sm text-slate-500 mt-1">Enterprise-grade heuristic scanning simplified for your everyday digital interactions.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Step 1 -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition">
+          <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-base mb-4">
+            1
+          </div>
+          <h3 class="font-bold text-slate-900 text-base mb-1.5">Paste or Upload</h3>
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            Drop in any unexpected SMS, WhatsApp chat, email, website link, or payment screenshot.
+          </p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition">
+          <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-base mb-4">
+            2
+          </div>
+          <h3 class="font-bold text-slate-900 text-base mb-1.5">Deep AI Analysis</h3>
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            Our multi-layer neural model scans linguistic urgency, unverified domains, and known scam databases.
+          </p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition">
+          <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-base mb-4">
+            3
+          </div>
+          <h3 class="font-bold text-slate-900 text-base mb-1.5">Clear Verdict & Steps</h3>
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            Instantly receive Red/Green indicators with specific guidance to block, report, or proceed safely.
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-navy-950 text-slate-400 py-10 px-4 sm:px-6 border-t border-navy-800 text-xs mt-auto">
+    <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-2">
+        <div class="w-6 h-6 rounded-md bg-blue-600 flex items-center justify-center text-white">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <span class="font-bold text-slate-200">Anti-Scammer AI <span class="font-normal text-slate-400">by</span> <span class="font-black text-cyan-400 uppercase tracking-wide">SAAR TECH</span></span>
+        <span class="text-slate-600">|</span>
+        <span>Zero Data Retention • In-Memory Processing</span>
+      </div>
+
+      <div class="flex items-center gap-6">
+        <a href="#helpline" class="hover:text-slate-200 transition">Emergency Helplines</a>
+        <a href="#privacy" class="hover:text-slate-200 transition">Privacy Commitment</a>
+        <a href="#terms" class="hover:text-slate-200 transition">Security Tips</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- HELP & HELPLINES MODAL -->
+  <div id="helpModal" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 animate-in">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
+          <svg class="w-5 h-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+          Emergency Anti-Fraud Helplines
+        </h3>
+        <button id="closeHelpModal" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="py-4 space-y-3 text-xs sm:text-sm text-slate-600">
+        <p>If you have already transferred money or shared bank details with a scammer:</p>
+        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="font-semibold text-slate-800">Bank Fraud Hotlines:</span>
+            <span class="text-blue-600 font-mono font-bold">Call card back #</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="font-semibold text-slate-800">US FTC Identity Theft:</span>
+            <span class="text-blue-600 font-mono font-bold">1-877-438-4338</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="font-semibold text-slate-800">UK Action Fraud:</span>
+            <span class="text-blue-600 font-mono font-bold">0300 123 2040</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="font-semibold text-slate-800">Global Cyber Crime:</span>
+            <span class="text-blue-600 font-mono font-bold">reportfraud.ftc.gov</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-2">
+        <button id="dismissHelpModalBtn" class="w-full py-2.5 bg-navy-900 hover:bg-navy-800 text-white font-semibold rounded-xl text-xs sm:text-sm transition">
+          Got it, Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GOOGLE GEMINI API CONFIGURATION MODAL -->
+  <div id="geminiModal" class="fixed inset-0 bg-slate-950/65 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 animate-in">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 text-white flex items-center justify-center shadow-sm">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48 2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48 2.83-2.83"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="font-bold text-slate-900 text-base">Settings</h3>
+            <p class="text-xs text-slate-500">Google Gemini API Key Management</p>
+          </div>
+        </div>
+        <button id="closeGeminiModal" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="py-5 space-y-4">
+        <div>
+          <div class="flex items-center justify-between mb-1.5">
+            <label for="geminiApiKeyInput" class="text-xs font-bold text-slate-800">
+              Google Gemini API Key
+            </label>
+            <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="text-[11px] text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+              <span>Get Free Key (Google AI Studio)</span>
+              <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+          </div>
+          <div class="relative">
+            <input 
+              type="password" 
+              id="geminiApiKeyInput" 
+              placeholder="AIzaSy..." 
+              autocomplete="off"
+              class="w-full text-xs sm:text-sm font-mono text-slate-800 placeholder-slate-400 px-3.5 py-2.5 pr-10 rounded-xl border border-slate-300 focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100 outline-none transition">
+            <button type="button" id="toggleApiKeyVisibility" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+              <svg class="w-4 h-4" id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-1.5">Your key is kept safe in your browser's <code class="bg-slate-100 px-1 py-0.5 rounded text-slate-700">localStorage</code> and called directly via Google's official Gemini endpoint.</p>
+        </div>
+
+        <div class="p-3 bg-blue-50/80 border border-blue-200/80 rounded-xl flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <div>
+              <p class="text-xs font-bold text-navy-900">Active Model: <code class="text-blue-700 font-mono">gemini-3.8-flash</code></p>
+              <p class="text-[11px] text-slate-500 font-mono">v1beta/models/gemini-3.8-flash:generateContent</p>
+            </div>
+          </div>
+          <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 border border-blue-200">
+            Active Endpoint
+          </span>
+        </div>
+
+        <!-- Connection Test Box -->
+        <div id="geminiTestResult" class="hidden p-3 rounded-xl text-xs font-medium"></div>
+      </div>
+
+      <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
+        <button type="button" id="testGeminiKeyBtn" class="text-xs font-semibold px-3.5 py-2.5 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-700 transition flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          <span id="testKeyBtnText">Test Key</span>
+        </button>
+        <div class="flex items-center gap-2">
+          <button type="button" id="clearGeminiKeyBtn" class="text-xs font-semibold px-3 py-2.5 rounded-xl text-red-600 hover:bg-red-50 transition hidden">
+            Remove Key
+          </button>
+          <button type="button" id="saveGeminiKeyBtn" class="text-xs font-bold px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white shadow-sm transition">
+            Save & Activate
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Main JavaScript Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
