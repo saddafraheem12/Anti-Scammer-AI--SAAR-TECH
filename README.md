@@ -1,75 +1,175 @@
-# Anti-Scammer AI by SAAR TECH — Frontend UI & Google Gemini Integration
+🛡️ Anti-Scammer AI — SAAR TECH
 
-An advanced AI-powered web application interface engineered by **SAAR TECH** to protect users against SMS fraud, phishing links, and deceptive social media/WhatsApp screenshots before they click or respond.
+AI-Assisted Digital Scam Awareness | NYLP AI Hackathon 2026
 
----
+Anti-Scammer AI is a mobile-friendly web prototype developed by Team SAAR TECH to help users recognize potential warning signs in suspicious messages, URLs, and screenshots. The project aims to make digital scam awareness more accessible through a simple, user-friendly interface.
 
-## 🌟 Key Features & Requirements
+«Important: This project is an early-stage prototype. Its assessments may be inaccurate and must not be treated as a guarantee of safety.»
 
-1. **Clean, Modern & Mobile-First Layout**:
-   - Built with responsive design principles tailored for mobile screens (touch-friendly targets) and widescreen desktops.
-   - Glassmorphic navigation header, live fraud alert banner, and emergency helpline quick-access modal.
+🌟 Project Overview
 
-2. **3 Main Threat Analysis Tabs**:
-   - 💬 **Message Scanner**: Large input textarea for pasting SMS, WhatsApp messages, and phishing emails with character counters, quick paste, and pre-loaded scam samples (Fake Bank Alert, Unclaimed Package, WhatsApp Job Scam).
-   - 🔗 **Link Checker**: Dedicated URL checker with real-time domain parsing and quick-test phishing links.
-   - 📸 **Screenshot Analyzer**: Drag-and-drop file upload zone supporting PNG, JPG, and WEBP with instant image preview, removal tool, and one-click sample WhatsApp scam generator.
+Online scams can use fake prizes, urgent messages, phishing links, fraudulent job offers, and impersonation to persuade people to share sensitive information or money. Many users need straightforward ways to assess suspicious content before responding.
 
-3. **Hero Section & Team Branding**:
-   - **Title**: `Anti-Scammer AI by SAAR TECH` with distinct cyan/teal gradient typography.
-   - **Subtitle**: *"Protect yourself from digital scammers before you click."*
-   - Security verification badges and live threat shield status.
+Anti-Scammer AI explores how an AI-assisted interface can help users identify possible scam indicators and make more informed decisions online.
 
-4. **Professional Color Palette**:
-   - Deep navy blues (`#060D1A`, `#0A172E`, `#132850`) and crisp whites with subtle slate backgrounds.
-   - **Red Indicator**: High-risk warning box (`#EF4444` / `#DC2626`) with glowing borders, warning icons, scam probability score, and immediate recommended actions.
-   - **Green Indicator**: Clean verified box (`#10B981`) demonstrating safe verdicts and trust scores.
+🎯 Problem Statement
 
-5. **Spacious, Accessible Inputs**:
-   - Generous text area and input fields with clear focus states and accessibility features.
-   - One-tap example chips to test real-world scam templates with zero typing needed.
+People receive suspicious SMS messages, WhatsApp messages, emails, social media content, and links. Recognizing fraudulent content can be difficult, particularly when messages create urgency or appear to come from trusted organizations.
 
-6. **Interactive "Analyze" Workflow with Real Google Gemini AI**:
-   - Directly integrated with **Google Gemini REST API**:
-     - Supported model: `gemini-3.8-flash`.
-     - In-browser API key management modal with live test ping and local storage persistence.
-     - Structured JSON output format for threat classification, scam probability, itemized indicator breakdowns, and actionable safeguards.
-     - Pure real-time raw fetch integration without mock or simulated data.
+Users need accessible digital safety tools that help them evaluate warning signs without requiring advanced cybersecurity knowledge.
 
----
+💡 Proposed Solution
 
-## 🔑 How to Use the Google Gemini API Integration
+Anti-Scammer AI brings three scam-awareness tools together in one web interface:
 
-1. Open the application in your browser.
-2. Click the **"Settings"** icon (gear icon) in the top header.
-3. Enter your **Google Gemini API Key** (get a free key at [Google AI Studio](https://aistudio.google.com/app/apikey)).
-4. Optional: Click **"Test Key"** to verify connection latency and status.
-5. Click **"Save & Activate"** (stored securely in browser `localStorage.gemini_api_key`).
-6. Paste any suspicious message into the **Message Scanner** and click **"Analyze with Anti-Scammer AI"**.
-   - If analyzed without a key, the app displays: *"Please enter your Gemini API Key in settings first."*
-   - Sends the exact scam detection instruction to `gemini-1.5-flash` and returns a raw JSON object `{ status, risk_score, explanation }`.
-   - Automatically switches the UI between **Red Warning** (for *Scam* / *Suspicious*) and **Green Safe** (for *Safe*).
+- Message Scanner: An interface for submitting suspicious messages for assessment.
+- Link Checker: A tool interface for entering and assessing potentially suspicious URLs.
+- Screenshot Analyzer: An interface for uploading and previewing screenshots that may contain scam-related content.
 
----
+The project is designed to explore AI-assisted analysis and communicate possible risks in a simple format. Results are advisory and should be independently verified.
 
-## 🚀 How to Run and Preview
+✨ Features
 
-### Option 1: Direct Browser Launch (Zero Installation)
-Simply double-click [`index.html`](index.html) or [`standalone.html`](standalone.html) (self-contained single-file) in any browser (Chrome, Edge, Firefox, Safari).
+💬 Message Scanner
 
-### Option 2: Local HTTP Server (Node.js)
-```bash
-# In the project directory:
+- Text input for suspicious SMS, WhatsApp messages, and emails.
+- Example scam messages for testing the interface.
+- An analysis workflow designed to present potential warning signs.
+
+🔗 Link Checker
+
+- URL input and domain-related information display.
+- Example links for interface testing.
+- A workflow intended to help users assess suspicious URLs.
+
+Limitation: A displayed result should not be interpreted as proof that a website is safe or malicious unless supported by a verified analysis method.
+
+📸 Screenshot Analyzer
+
+- Image upload interface supporting PNG, JPG, and WEBP.
+- Image preview and removal controls.
+- Example screenshot functionality, where implemented.
+
+Limitation: Image upload and preview alone do not establish that OCR, QR-code scanning, or AI-based image analysis is working.
+
+📱 Responsive User Interface
+
+- Mobile-first layout.
+- Dark navy, cyan, and teal visual theme.
+- Risk-indicator interface and suggested safety actions, where implemented.
+
+🧰 Technology Stack
+
+- HTML — application structure
+- CSS — responsive styling and visual design
+- JavaScript — interface interactions and application logic
+- Google Gemini API — intended AI-assisted analysis integration; live operation depends on a valid API key, supported model, and successful API response
+- GitHub — source-code hosting and version control
+- Netlify — web deployment
+
+🤖 AI Methodology and Implementation
+
+The intended AI-assisted workflow is:
+
+1. The user enters suspicious content into an available analysis interface.
+2. The application prepares the content and sends a request to the configured AI service, if the integration is enabled and working.
+3. The response is processed by the application.
+4. The interface presents an assessment and potential warning signs.
+5. The user is encouraged to verify important information independently.
+
+AI-generated responses can be incorrect, incomplete, or misleading. The prototype should not be used as the sole basis for financial, cybersecurity, or other high-impact decisions.
+
+AI Model and API Configuration
+
+The project is designed to integrate with the Google Gemini REST API.
+
+- Provider: Google Gemini
+- Configured model: Confirm the exact model identifier in the application source code before listing it here.
+- API access: Requires a valid API key and a model available to the configured API account.
+- Response handling: The application is intended to process analysis responses and display results in the interface.
+
+Verification status: Do not describe the AI integration as fully operational until a real API request has succeeded and the returned result has been tested.
+
+Security note: This prototype uses browser-side API-key configuration. Browser local storage is not a secure vault, and client-side API keys can be exposed. Do not use sensitive production credentials in a public frontend. A production version should route requests through a protected backend and apply suitable access controls.
+
+🚀 How to Run Locally
+
+Option 1: Open in a Browser
+
+1. Download or clone the repository.
+2. Open the project folder.
+3. Open "index.html" in a compatible browser if the project files support direct browser execution.
+
+Option 2: Use a Local HTTP Server
+
+Install Node.js, open a terminal in the project directory, and run:
+
 npx serve -l 3000
-```
-Then visit `http://localhost:3000`.
 
----
+Then visit:
 
-## 📁 File Structure
+http://localhost:3000
 
-- [`index.html`](index.html) — Application layout, Hero, 3 tabs, Gemini setup modal, and dynamic Red/Green indicator result cards.
-- [`styles.css`](styles.css) — Custom styles, glow effects, bounce animations, and responsive rules.
-- [`app.js`](app.js) — Google Gemini API client, JSON threat schema parser, tab router, and UI state manager.
-- [`standalone.html`](standalone.html) — Self-contained, single-file distribution with embedded styles and JavaScript.
-- [`package.json`](package.json) — NPM script definitions for local serving.
+If the command or project structure differs from the actual repository, follow the instructions provided by the existing "package.json".
+
+📁 Project Structure
+
+The following describes the expected roles of the main files; confirm that each file exists in the repository.
+
+- "index.html" — main application interface
+- "styles.css" — layout, responsive styles, and visual design
+- "app.js" — application interactions and analysis logic
+- "standalone.html" — optional self-contained version
+- "package.json" — project scripts and dependencies, if included
+- "images.jpg" — project screenshot, if present
+- "images 2 green.jpg" — additional project screenshot, if present
+
+📸 Product Screenshots
+
+Project screenshots:
+
+- "Screenshot 1 — Main Interface" (images.jpg)
+- "Screenshot 2 — Green Result Interface" (images%202%20green.jpg)
+
+If the image filenames or paths change, update these links to match the repository.
+
+👥 Team Members and Contributions
+
+Team Name: SAAR TECH
+
+- Aaliya Raheem — Deep Research and Problem Analysis: Researched the problem and helped identify project requirements.
+- Anum Raheem — Demo Video and Presentation: Created the demonstration video and contributed to presenting the project.
+- Saddaf Raheem — Frontend Development, Coding, Testing, Debugging, and Deployment: Worked on frontend implementation, feature testing, debugging, and deployment.
+
+🌐 Project Links
+
+- Live application: https://anti-scammer-ai-saar-teach.netlify.app/
+- Source repository: https://github.com/saddafraheem12/Anti-Scammer-AI--SAAR-TECH
+
+🧪 Testing and Limitations
+
+The project is an early-stage functional prototype. Individual features and AI integration must be tested with real inputs before being described as fully operational.
+
+Known considerations include:
+
+- AI-generated assessments may be incorrect.
+- A URL's appearance alone cannot establish its safety.
+- Uploaded image previews do not necessarily mean image content has been analyzed.
+- AI model availability and API behavior depend on the actual configuration.
+- Browser-side credential storage has security limitations.
+- Further testing, validation, privacy safeguards, and reliability improvements are needed.
+
+🔭 Future Improvements
+
+- Verify and strengthen the AI integration.
+- Improve URL and domain-risk assessment.
+- Add validated screenshot text extraction and image analysis where appropriate.
+- Expand testing across mobile devices and browsers.
+- Improve privacy, credential handling, and error reporting.
+- Provide clearer explanations of risk indicators and recommended safety steps.
+
+🏁 Hackathon Submission
+
+Anti-Scammer AI is submitted by Team SAAR TECH for the NYLP AI Hackathon 2026. The project explores an accessible, AI-assisted approach to digital scam awareness.
+
+Our goal is to help users pause, recognize potential warning signs, and verify suspicious content before taking action.
